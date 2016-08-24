@@ -1,3 +1,8 @@
+'''
+Purpose: Takes a list of centroid points and calls GoogleMaps API to get a list of N
+		 closest grocery stores to it. Saves this data to a CSV.
+'''
+
 import os
 import googlemaps
 import progressbar
@@ -13,16 +18,16 @@ number_stores = 3
 data = pd.read_csv(DIR + '/inter/block-centroid-with-pops-1.csv')
 
 for j in range(number_stores):
-	data['store-name-' + str(j)] = 'store-name'
-	data['store-id-' + str(j)] = 'id'
-	data['store-longitude-' + str(j)] = 'store-longitude'
-	data['store-latitude-' + str(j)] = 'store-latitude'
-	data['store-vicinity-' + str(j)] = 'vicinity'
+	data['storename-' + str(j)] = 'store-name'
+	data['storeid-' + str(j)] = 'id'
+	data['storelongitude-' + str(j)] = 'store-longitude'
+	data['storelatitude-' + str(j)] = 'store-latitude'
+	data['storevicinity-' + str(j)] = 'vicinity'
 
 data = data[:75]
 
-# look through rows, extract top 3 search results from google for a given location
-# how can we make this faster?
+# look through rows, extract top N search results from google for a given location
+# TODO: how can we make this faster?
 my_type = 'grocery_or_supermarket'
 my_language = 'en'
 
@@ -32,11 +37,11 @@ for i in bar(range(75)):
 	results = gmaps.places_nearby(my_location, language=my_language, open_now=False, rank_by='distance', type=my_type)
 
 	for j in range(number_stores):
-		data = data.set_value(i, 'store-name-' + str(j), results['results'][j]['name'].encode('ascii', 'ignore'))
-		data = data.set_value(i, 'store-id-' + str(j), results['results'][j]['id'])
-		data = data.set_value(i, 'store-latitude-' + str(j), results['results'][j]['geometry']['location']['lat'])
-		data = data.set_value(i, 'store-longitude-' + str(j), results['results'][j]['geometry']['location']['lng'])
-		data = data.set_value(i, 'store-vicinity-' + str(j), results['results'][j]['vicinity'].encode('ascii', 'ignore'))
+		data = data.set_value(i, 'storename-' + str(j), results['results'][j]['name'].encode('ascii', 'ignore'))
+		data = data.set_value(i, 'storeid-' + str(j), results['results'][j]['id'])
+		data = data.set_value(i, 'storelatitude-' + str(j), results['results'][j]['geometry']['location']['lat'])
+		data = data.set_value(i, 'storelongitude-' + str(j), results['results'][j]['geometry']['location']['lng'])
+		data = data.set_value(i, 'storevicinity-' + str(j), results['results'][j]['vicinity'].encode('ascii', 'ignore'))
 
 	time.sleep(0.1)
 
