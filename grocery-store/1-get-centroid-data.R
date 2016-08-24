@@ -8,8 +8,8 @@ DATA_DIR = "Documents/dc-data/data/"
 DIR = "Documents/dc-data/grocery-store/"
 
 # libaries
-library(dplyr) 
-library(ggplot2) 
+library(dplyr)
+library(ggplot2)
 library(maptools)
 library(rgdal)
 library(geosphere)
@@ -19,15 +19,15 @@ library(stringr)
 all_centroid = read.table(paste0(DATA_DIR, "tigerline/dc-block-population-centroid.txt"), header = TRUE, sep = "\t")
 
 # reshape data, filter to only keep blocks with people in it
-centroid = all_centroid %>% 
+centroid = all_centroid %>%
   mutate(COUNTYFP10 = str_pad(as.character(COUNTYFP10), width=3, pad="0"),
          TRACTCE10 = str_pad(as.character(TRACTCE10), width=6, pad="0"),
          GEOID10 = paste0(STATEFP10, COUNTYFP10, TRACTCE10, BLOCKCE10)) %>%
-  filter(P0010001 > 0) %>% # census block must have a population 
+  filter(P0010001 > 0) %>% # census block must have a population
   select(GEOID10, X, Y) %>%
   rename(longitude = X, latitude = Y)
 
-# save results in groups of 1500 (due to GoogleMaps API)
+# save results in groups of 1500 (due to GoogleMaps API limits)
 centroid_1 = centroid[1:1626, ]
 centroid_2 = centroid[1621:3252, ]
 centroid_3 = centroid[3253:4879, ]
