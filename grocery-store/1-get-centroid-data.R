@@ -28,12 +28,10 @@ centroid = all_centroid %>%
   rename(longitude = X, latitude = Y)
 
 # save results in groups of 1500 (due to GoogleMaps API limits)
-centroid_1 = centroid[1:1626, ]
-centroid_2 = centroid[1621:3252, ]
-centroid_3 = centroid[3253:4879, ]
-centroid_4 = centroid[4879:6507, ]
+centroid_1 = centroid[1:1455, ]
+centroid_2 = centroid[1456:2911, ]
+centroid_3 = centroid[2911:4364, ]
 
 write.csv(centroid_1, file = paste0(DIR, "inter/block-centroid-with-pops-1.csv"), row.names = FALSE)
 write.csv(centroid_2, file = paste0(DIR, "inter/block-centroid-with-pops-2.csv"), row.names = FALSE)
 write.csv(centroid_3, file = paste0(DIR, "inter/block-centroid-with-pops-3.csv"), row.names = FALSE)
-write.csv(centroid_4, file = paste0(DIR, "inter/block-centroid-with-pops-4.csv"), row.names = FALSE)

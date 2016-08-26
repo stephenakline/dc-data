@@ -3,8 +3,7 @@
 # ----------------------------------------------------------------------------------------------------- #
 
 rm(list = ls())
-DATA_DIR = "Documents/dc-data/data/"
-DIR = "Documents/dc-data/grocery-store/"
+DIR = getwd()
 
 # libaries
 library(dplyr)
@@ -15,12 +14,12 @@ library(stringr)
 options(digits=11)
 
 # load in store data
-files = list.files(paste0(DIR, "inter/")) 
+files = list.files(paste0(DIR, "/inter/")) 
 files_to_load = subset(files, grepl("^stores", files)) # only keep files that start with 'stores'
 
 store_data = data.frame()
 for(i in files_to_load) {
-  temp = read.csv(paste0(DIR, "inter/", i), stringsAsFactors = FALSE)
+  temp = read.csv(paste0(DIR, "/inter/", i), stringsAsFactors = FALSE)
   store_data = rbind(store_data, temp)
 }
 rm(temp)
@@ -29,7 +28,8 @@ rm(temp)
 store_data = store_data %>% select(-X)
 
 # reshape data --> http://stackoverflow.com/questions/25925556/gather-multiple-sets-of-columns-with-tidyr
-store_wide = store_data %>% gather(key, value, storename.0:storevicinity.2) %>%
+store_wide = store_data[, 1:8] %>% gather(key, value, storename.0:storevicinity.0) %>%
+# store_wide = store_data %>% gather(key, value, storename.0:storevicinity.2) %>%
   separate(key, c("feature", "id")) %>%
   arrange(GEOID10) 
   # spread(id, value)
@@ -43,4 +43,4 @@ list_stores = left_join(list_stores_by_id, list_store_names, by = c("GEOID10", "
 
 # get count of appearnce by store
 counts_of_stores = list_stores %>% group_by(store_name) %>% summarise(count = n())
-
+print(paste0('the unique number of stores is: ', nrow(counts_of_stores)))
