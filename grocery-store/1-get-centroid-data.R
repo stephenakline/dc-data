@@ -4,8 +4,8 @@
 # ----------------------------------------------------------------------------------------------------- #
 
 rm(list = ls())
-DATA_DIR = "Documents/dc-data/data/"
-DIR = "Documents/dc-data/grocery-store/"
+DIR = paste0(getwd(), "/grocery-store")
+DATA_DIR = paste0(getwd(), "/data")
 
 # libaries
 library(dplyr)
@@ -16,7 +16,7 @@ library(geosphere)
 library(stringr)
 
 # load in block centroid data
-all_centroid = read.table(paste0(DATA_DIR, "tigerline/dc-block-population-centroid.txt"), header = TRUE, sep = "\t")
+all_centroid = read.table(paste0(DATA_DIR, "/tigerline/dc-block-population-centroid.txt"), header = TRUE, sep = "\t")
 
 # reshape data, filter to only keep blocks with people in it
 centroid = all_centroid %>%
@@ -32,6 +32,6 @@ centroid_1 = centroid[1:1455, ]
 centroid_2 = centroid[1456:2911, ]
 centroid_3 = centroid[2911:4364, ]
 
-write.csv(centroid_1, file = paste0(DIR, "inter/block-centroid-with-pops-1.csv"), row.names = FALSE)
-write.csv(centroid_2, file = paste0(DIR, "inter/block-centroid-with-pops-2.csv"), row.names = FALSE)
-write.csv(centroid_3, file = paste0(DIR, "inter/block-centroid-with-pops-3.csv"), row.names = FALSE)
+write.csv(centroid_1, file = paste0(DIR, "/inter/block-centroid-with-pops-1.csv"), row.names = FALSE)
+write.csv(centroid_2, file = paste0(DIR, "/inter/block-centroid-with-pops-2.csv"), row.names = FALSE)
+write.csv(centroid_3, file = paste0(DIR, "/inter/block-centroid-with-pops-3.csv"), row.names = FALSE)
